@@ -9,10 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Add services to the context manager
 var contextManager = builder.Configuration.GetConnectionString("DefaultConnectionString");
-builder.Services.AddDbContext<DataContext>(opt=>
+builder.Services.AddDbContext<DataContext>(opt =>
 {
     opt.UseSqlite(contextManager);
 });
+//secrets.Add Cros protected override Https Request
+builder.Services.AddCors();
+
+//end Cros
 //end context
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,9 +32,14 @@ var app = builder.Build();
 //     app.UseSwaggerUI();
 // }
 
-// app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
-// app.UseAuthorization();
+//app.UseAuthorization();
+
+//secrets.Add Cros  Https Request
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
+.WithOrigins("https://localhost:4200"));
+//end Cros
 
 app.MapControllers();
 
